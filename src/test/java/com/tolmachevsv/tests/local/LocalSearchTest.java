@@ -1,5 +1,9 @@
 package com.tolmachevsv.tests.local;
 
+import com.tolmachevsv.annotations.Layer;
+import io.qameta.allure.AllureId;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -10,49 +14,59 @@ import static com.codeborne.selenide.Selenide.*;
 import static io.appium.java_client.AppiumBy.*;
 import static io.qameta.allure.Allure.step;
 
+@Feature("Wikipedia")
+@Owner("tolmachevsv")
+@Layer("mobile")
 @Tag("local_selenide_android")
 public class LocalSearchTest extends LocalTestBase {
 
     @Test
+    @AllureId("23339")
+    @DisplayName("Проверка работоспособности поисковой строки")
+    @Tag("critical")
     void successfulSearchTest() {
-        step("Skip onboarding screen", () ->
+        step("Пропустить экран обучения", () ->
                 $(id("org.wikipedia.alpha:id/fragment_onboarding_skip_button")).click());
-        step("Type search", () -> {
+        step("Нажать на поле поисковой строки и ввести 'Java (programming language)'", () -> {
             $(accessibilityId("Search Wikipedia")).click();
             $(id("org.wikipedia.alpha:id/search_src_text")).sendKeys("Java (programming language)");
         });
-        step("Verify content found", () ->
+        step("Убедиться, что контент найден", () ->
                 $$(id("org.wikipedia.alpha:id/page_list_item_title"))
                         .shouldHave(sizeGreaterThan(0)));
     }
 
     @Test
-    @DisplayName("Check if button's name is 'Explore'")
+    @AllureId("23341")
+    @DisplayName("Проверка наименования кнопки: 'Explore'")
     void checkButtonName() {
-        step("Skip onboarding screen", () ->
+        step("Пропустить экран обучения", () ->
                 $(id("org.wikipedia.alpha:id/fragment_onboarding_skip_button")).click());
-        step("Check name", () -> {
+        step("Убедиться, что наименование кнопки - 'Explore'", () -> {
             $(id("org.wikipedia.alpha:id/largeLabel")).shouldHave(text("Explore"));
         });
     }
 
     @Test
+    @AllureId("23340")
+    @DisplayName("Проверка функционала добавления в Избранное")
+    @Tag("critical")
     void AddToFavorites() {
-        step("Search 'Java (programming language)'", () -> {
+        step("Найти в поисковой строке 'Java (programming language)'", () -> {
             successfulSearchTest();
             $$(id("org.wikipedia.alpha:id/page_list_item_title")).get(0).click();
         });
-        step("Save the article", () -> {
+        step("Сохранить статью", () -> {
             $(id("org.wikipedia.alpha:id/article_menu_bookmark")).click();
         });
-        step("Back to the main page", () -> {
+        step("Вернуться на главную страницу", () -> {
             $(className("android.widget.ImageButton")).click();
             $(className("android.widget.ImageButton")).click();
         });
-        step("Go to the saved articles", () -> {
+        step("Перейти к сохраненным статьям", () -> {
             $(xpath("//android.widget.FrameLayout[@content-desc=\"Saved\"]")).click();
         });
-        step("Check if the article was added in saved articles", () -> {
+        step("Убедиться, что статья добавилась в сохраненные", () -> {
             $(id("org.wikipedia.alpha:id/negativeButton")).click();
             $$(className("android.view.ViewGroup")).get(2).click();
             $(id("org.wikipedia.alpha:id/page_list_item_title"))
