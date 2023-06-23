@@ -24,51 +24,51 @@ public class LocalSearchTest extends LocalTestBase {
 
     @Test
     @AllureId("23339")
-    @DisplayName("Проверка работоспособности поисковой строки")
+    @DisplayName("Checking the efficiency of the search string")
     @Tag("critical")
     void successfulSearchTest() {
-        step("Пропустить экран обучения", () ->
+        step("Skip on-boarding screen", () ->
                 $(id("org.wikipedia.alpha:id/fragment_onboarding_skip_button")).click());
-        step("Нажать на поле поисковой строки и ввести 'Java (programming language)'", () -> {
+        step("Click on the search box and enter 'Java (programming language)'", () -> {
             $(accessibilityId("Search Wikipedia")).click();
             $(id("org.wikipedia.alpha:id/search_src_text")).sendKeys("Java (programming language)");
         });
-        step("Убедиться, что контент найден", () ->
+        step("Verify content found", () ->
                 $$(id("org.wikipedia.alpha:id/page_list_item_title"))
                         .shouldHave(sizeGreaterThan(0)));
     }
 
     @Test
     @AllureId("23341")
-    @DisplayName("Проверка наименования кнопки: 'Explore'")
+    @DisplayName("Checking the button name: 'Explore'")
     void checkButtonName() {
-        step("Пропустить экран обучения", () ->
+        step("Skip on-boarding screen", () ->
                 $(id("org.wikipedia.alpha:id/fragment_onboarding_skip_button")).click());
-        step("Убедиться, что наименование кнопки - 'Explore'", () -> {
+        step("Verify the name of the button - 'Explore'", () -> {
             $(id("org.wikipedia.alpha:id/largeLabel")).shouldHave(text("Explore"));
         });
     }
 
     @Test
     @AllureId("23340")
-    @DisplayName("Проверка функционала добавления в Избранное")
+    @DisplayName("Article is successfully added to Favorites")
     @Tag("critical")
     void AddToFavorites() {
-        step("Найти в поисковой строке 'Java (programming language)'", () -> {
+        step("Find in the search bar 'Java (programming language)'", () -> {
             successfulSearchTest();
             $$(id("org.wikipedia.alpha:id/page_list_item_title")).get(0).click();
         });
-        step("Сохранить статью", () -> {
+        step("Save the article", () -> {
             $(id("org.wikipedia.alpha:id/article_menu_bookmark")).click();
         });
-        step("Вернуться на главную страницу", () -> {
+        step("Go back to the main page", () -> {
             $(className("android.widget.ImageButton")).click();
             $(className("android.widget.ImageButton")).click();
         });
-        step("Перейти к сохраненным статьям", () -> {
+        step("Go to saved articles", () -> {
             $(xpath("//android.widget.FrameLayout[@content-desc=\"Saved\"]")).click();
         });
-        step("Убедиться, что статья добавилась в сохраненные", () -> {
+        step("Verify the article was added to the saved", () -> {
             $(id("org.wikipedia.alpha:id/negativeButton")).click();
             $$(className("android.view.ViewGroup")).get(2).click();
             $(id("org.wikipedia.alpha:id/page_list_item_title"))

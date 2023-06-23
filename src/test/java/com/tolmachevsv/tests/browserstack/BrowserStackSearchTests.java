@@ -25,14 +25,14 @@ public class BrowserStackSearchTests extends BrowserStackTestBase {
 
     @Test
     @AllureId("23338")
-    @DisplayName("Проверка работоспособности поисковой строки")
+    @DisplayName("Checking the efficiency of the search string")
     @Tag("critical")
     void successfulSearchTest() {
-        step("В поисковой строке ввести 'java'", () -> {
+        step("Enter 'java' in search field", () -> {
             $(accessibilityId("Search Wikipedia")).click();
             $(id("org.wikipedia.alpha:id/search_src_text")).sendKeys("java");
         });
-        step("Убедиться, что контент найден", () ->
+        step("Verify content found", () ->
                 $$(id("org.wikipedia.alpha:id/page_list_item_title"))
                         .shouldHave(sizeGreaterThan(0)));
     }
